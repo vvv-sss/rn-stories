@@ -1,5 +1,5 @@
 import React, {FC, useContext} from 'react';
-import {StyleSheet, Text} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 
 import {AboutScreenContext} from './_context';
 import {GradientBackground} from '@components_global';
@@ -9,7 +9,9 @@ const AboutScreenLayout: FC = () => {
 
   return (
     <GradientBackground>
-      <Text>AboutScreen</Text>
+      <View style={styles.container}>
+        <Text>AboutScreen</Text>
+      </View>
     </GradientBackground>
   );
 };
@@ -17,6 +19,8 @@ const AboutScreenLayout: FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

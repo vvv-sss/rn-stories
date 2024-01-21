@@ -1,50 +1,71 @@
 import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import {AntDesign, Feather} from '@expo/vector-icons';
 import {Tabs} from 'expo-router';
-
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return (
-    <FontAwesome
-      size={28}
-      style={{marginBottom: -3}}
-      {...props}
-    />
-  );
-}
+import {View, StyleSheet} from 'react-native';
 
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
+        tabBarShowLabel: false,
+        tabBarActiveTintColor: 'black',
+        tabBarStyle: {
+          position: 'absolute',
+          left: 50,
+          right: 50,
+          height: 100,
+          borderTopWidth: 0,
+          bottom: 20,
+          backgroundColor: 'transparent',
+        },
       }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'About',
-          tabBarIcon: ({color}) => (
-            <TabBarIcon
-              name="code"
-              color={color}
-            />
+          tabBarIcon: ({color, focused}) => (
+            <View
+              style={[
+                styles.iconContainer,
+                {backgroundColor: focused ? 'rgba(255, 255, 255, 0.2)' : 'transparent'},
+              ]}>
+              <AntDesign
+                name="info"
+                size={30}
+                color={color}
+              />
+            </View>
           ),
         }}
       />
       <Tabs.Screen
         name="content"
         options={{
-          title: 'Content',
-          tabBarIcon: ({color}) => (
-            <TabBarIcon
-              name="code"
-              color={color}
-            />
+          tabBarIcon: ({color, focused}) => (
+            <View
+              style={[
+                styles.iconContainer,
+                {backgroundColor: focused ? 'rgba(255, 255, 255, 0.2)' : 'transparent'},
+              ]}>
+              <Feather
+                name="list"
+                size={30}
+                color={color}
+              />
+            </View>
           ),
         }}
       />
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  iconContainer: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
