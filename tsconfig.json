@@ -3,9 +3,18 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@assets": [
+        "./assets/*"
+      ],
+      "@components_global": [
+        "./components/index.ts"
+      ],
+      "@lib_global": [
+        "./lib/index.ts"
+      ],
+      "@screens": [
+        "./screens/index.ts"
+      ],
     }
   },
   "include": [
