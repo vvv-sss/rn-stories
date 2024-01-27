@@ -1,3 +1,2 @@
-export {AboutScreen} from './tabs';
-export {ContentScreen} from './tabs';
+export {default as StoriesListScreen} from './StoriesListScreen';
 export {HideBarsOnScrollScreen} from './stories';

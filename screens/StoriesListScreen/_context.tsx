@@ -1,15 +1,19 @@
+import {useRouter, Href} from 'expo-router';
 import React, {createContext, FC, PropsWithChildren} from 'react';
 
-interface AboutScreenContextValue {}
+interface StoriesListScreenContextValue {
+  handleItemPress: (path: Href<string>) => void;
+}
 
-export const AboutScreenContext = createContext<AboutScreenContextValue>(
-  {} as AboutScreenContextValue,
+export const StoriesListScreenContext = createContext<StoriesListScreenContextValue>(
+  {} as StoriesListScreenContextValue,
 );
 
-const AboutScreenProvider: FC<PropsWithChildren> = ({children}) => {
+const StoriesListScreenProvider: FC<PropsWithChildren> = ({children}) => {
   /*---------------------------------------------*
    * ⚛️ State, data, refs, variables, hooks etc.
    *---------------------------------------------*/
+  const router = useRouter();
 
   /*---------------------------------------------*
    * ⚡️ Effects
@@ -18,16 +22,24 @@ const AboutScreenProvider: FC<PropsWithChildren> = ({children}) => {
   /*---------------------------------------------*
    * 🔄 Callbacks
    *---------------------------------------------*/
+  const handleItemPress = (path: Href<string>) => {
+    router.push(path);
+  };
 
   /*---------------------------------------------*
    * 🌐 Context data
    *---------------------------------------------*/
-  const value: AboutScreenContextValue = {};
+  const value: StoriesListScreenContextValue = {
+    handleItemPress,
+  };
 
   /*---------------------------------------------*
    * 🖼️ Render
    *---------------------------------------------*/
-  return <AboutScreenContext.Provider value={value}>{children}</AboutScreenContext.Provider>;
+
+  return (
+    <StoriesListScreenContext.Provider value={value}>{children}</StoriesListScreenContext.Provider>
+  );
 };
 
-export default AboutScreenProvider;
+export default StoriesListScreenProvider;
