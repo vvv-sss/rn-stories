@@ -3,6 +3,7 @@ import {StyleSheet, Text, View} from 'react-native';
 
 import {AboutScreenContext} from './_context';
 import {GradientBackground} from '@components_global';
+import {SwipeableListItem} from './components/SwipeableListItem';
 
 const AboutScreenLayout: FC = () => {
   const {} = useContext(AboutScreenContext);
@@ -10,7 +11,7 @@ const AboutScreenLayout: FC = () => {
   return (
     <GradientBackground>
       <View style={styles.container}>
-        <Text>AboutScreen</Text>
+        <SwipeableListItem />
       </View>
     </GradientBackground>
   );

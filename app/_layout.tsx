@@ -1,10 +1,15 @@
+if (__DEV__) {
+  import('../ReactotronConfig').then(() => console.log('Reactotron Configured'));
+}
+
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import {DarkTheme, DefaultTheme, ThemeProvider} from '@react-navigation/native';
 import {useFonts} from 'expo-font';
 import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import {useEffect} from 'react';
-import {useColorScheme} from 'react-native';
+import {useColorScheme, StyleSheet} from 'react-native';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -48,7 +53,15 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack screenOptions={{headerShown: false}} />
+      <GestureHandlerRootView style={styles.container}>
+        <Stack screenOptions={{headerShown: false}} />
+      </GestureHandlerRootView>
     </ThemeProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
