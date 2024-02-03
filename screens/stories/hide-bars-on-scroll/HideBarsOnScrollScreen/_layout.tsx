@@ -1,10 +1,11 @@
 import React, {FC, useEffect, useRef} from 'react';
-import {Animated, StyleSheet, View} from 'react-native';
 
-import {GradientBackground} from '@components_global';
+import {Animated, StyleSheet, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+
 import {Footer, Header, ListItem} from './components';
-import {useStatusBarStyle} from '@lib_global';
+import {GradientBackground} from '@components_global';
+import {useStatusBarStyle} from '@hooks_global';
 
 const SCROLL_DISTANCE = 70;
 

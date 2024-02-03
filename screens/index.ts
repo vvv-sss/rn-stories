@@ -1,2 +1,2 @@
 export {default as StoriesListScreen} from './StoriesListScreen';
-export {HideBarsOnScrollScreen} from './stories';
+export * from './stories';

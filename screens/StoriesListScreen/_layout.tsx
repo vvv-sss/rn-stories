@@ -7,14 +7,14 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {withAlphaHex} from 'with-alpha-hex';
 import {Item, listData} from './lib';
 import {Feather} from '@expo/vector-icons';
-import {useStatusBarStyle} from '@lib_global';
+import {useStatusBarStyle} from '@hooks_global';
 
 const StoriesListScreenLayout: FC = () => {
   const {handleItemPress} = useContext(StoriesListScreenContext);
 
   const insets = useSafeAreaInsets();
 
-  useStatusBarStyle('dark');
+  useStatusBarStyle('light');
 
   return (
     <GradientBackground>
@@ -38,7 +38,7 @@ const StoriesListScreenLayout: FC = () => {
                 <Feather
                   name="arrow-down-right"
                   size={30}
-                  color={withAlphaHex('#000', 0.3)}
+                  color={withAlphaHex('#fff', 0.3)}
                 />
                 <Text style={styles.itemText}>{item.title}</Text>
               </TouchableOpacity>
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   sectionTitleContainer: {
     paddingVertical: 5,
     borderBottomWidth: 2,
-    borderBottomColor: withAlphaHex('#000', 0.2),
+    borderBottomColor: withAlphaHex('#fff', 0.2),
     alignItems: 'center',
   },
   sectionTitle: {
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 5,
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingTop: 10,
   },
   itemText: {
     width: '90%',

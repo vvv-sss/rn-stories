@@ -9,8 +9,11 @@
       "@components_global": [
         "./components/index.ts"
       ],
-      "@lib_global": [
-        "./lib/index.ts"
+      "@hooks_global": [
+        "./lib/hooks/index.ts"
+      ],
+      "@constants_global": [
+        "./lib/constants/index.ts"
       ],
       "@screens": [
         "./screens/index.ts"
