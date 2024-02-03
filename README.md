@@ -8,8 +8,8 @@ As a passionate React Native developer, I believe in the power of showcasing rea
 
 ## ✨ RN Stories ✨
 
-- [Scroll-responsive dynamic header and bottom bar visibility](./docs//hide-bars-on-scroll.md)
-- [Permissions Handling](./docs//permissions.md)
+- [Scroll-responsive dynamic header and bottom bar visibility](./screens/stories/hide-bars-on-scroll/hide-bars-on-scroll.md)
+- [Permissions Handling](./screens//stories//permissions/permissions.md)
 
 ... and many more to come! 🚀
 
