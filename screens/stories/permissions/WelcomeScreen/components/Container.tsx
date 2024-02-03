@@ -1,7 +1,7 @@
 import React, {FC, PropsWithChildren} from 'react';
 
 import {LinearGradient} from 'expo-linear-gradient';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {withAlphaHex} from 'with-alpha-hex';
 
@@ -9,7 +9,7 @@ export const Container: FC<PropsWithChildren> = ({children}) => {
   const insets = useSafeAreaInsets();
 
   return (
-    <SafeAreaView style={styles.view_1}>
+    <View style={styles.view_1}>
       <LinearGradient
         colors={[withAlphaHex('#000', 0.5), 'transparent']}
         style={styles.gradient_1}
@@ -18,10 +18,10 @@ export const Container: FC<PropsWithChildren> = ({children}) => {
         colors={['transparent', withAlphaHex('#000', 0.5)]}
         style={styles.gradient_2}
       />
-      <View style={[styles.view_2, {paddingTop: insets.top, paddingBottom: insets.bottom}]}>
+      <View style={[styles.view_2, {paddingTop: insets.top + 20, paddingBottom: insets.bottom + 20}]}>
         {children}
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
