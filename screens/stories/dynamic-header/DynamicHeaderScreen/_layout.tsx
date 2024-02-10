@@ -1,26 +1,27 @@
-import React, {FC, useContext, useRef} from 'react';
-import {
-  Alert,
-  Animated,
-  Dimensions,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React, {FC, useContext} from 'react';
+import {Alert, Dimensions, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {ArrowLeft, BellPlus, Plus} from 'lucide-react-native';
 import {DynamicHeaderScreenContext} from './_context';
 import {useStatusBarStyle} from '../../../../lib';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {tasks} from './lib';
 import {withAlphaHex} from 'with-alpha-hex';
+import Animated, {
+  Extrapolation,
+  interpolate,
+  interpolateColor,
+  useAnimatedRef,
+  useAnimatedScrollHandler,
+  useSharedValue,
+  withTiming,
+  scrollTo,
+} from 'react-native-reanimated';
 
 const {height} = Dimensions.get('screen');
 
 const HeaderMaxHeight = height * 0.3;
 const HeaderMinHeight = 80;
-const ScrollDistance = HeaderMaxHeight - HeaderMinHeight;
+const ScrollDistance = 100;
 
 const textColor = '#b9e2f5';
 const surfaceColor = '#0e1111';
@@ -28,40 +29,74 @@ const surfaceColor = '#0e1111';
 const DynamicHeaderScreenLayout: FC = () => {
   const {handleArrowLeftPress} = useContext(DynamicHeaderScreenContext);
 
-  const scrollOffsetY = useRef(new Animated.Value(0)).current;
-
   void useStatusBarStyle('dark');
 
   const insets = useSafeAreaInsets();
 
-  const animatedContainerBackground = scrollOffsetY.interpolate({
-    inputRange: [0, ScrollDistance],
-    outputRange: ['#648CF6', '#F3B4D8'],
-    extrapolate: 'clamp',
-  });
+  const animatedRef = useAnimatedRef();
 
-  const animatedHeaderHeight = scrollOffsetY.interpolate({
-    inputRange: [0, ScrollDistance],
-    outputRange: [HeaderMaxHeight, HeaderMinHeight],
-    extrapolate: 'clamp',
-  });
+  const animatedContainerBackground = useSharedValue('#648CF6');
+  const animatedHeaderHeight = useSharedValue(HeaderMaxHeight);
+  const animatedTopDateTranslateY = useSharedValue(-100);
+  const animatedMainDateOpacity = useSharedValue(1);
+  const animatedTopDateOpacity = useSharedValue(0);
 
-  const animatedMainDateOpacity = scrollOffsetY.interpolate({
-    inputRange: [0, ScrollDistance],
-    outputRange: [1, 0],
-    extrapolate: 'clamp',
-  });
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: e => {
+      animatedContainerBackground.value = interpolateColor(
+        e.contentOffset.y,
+        [0, ScrollDistance],
+        ['#648CF6', '#F3B4D8'],
+      );
+      animatedHeaderHeight.value = interpolate(
+        e.contentOffset.y,
+        [0, ScrollDistance * 3],
+        [HeaderMaxHeight, HeaderMinHeight],
+        Extrapolation.CLAMP,
+      );
+      animatedTopDateTranslateY.value = interpolate(
+        e.contentOffset.y,
+        [0, ScrollDistance * 3],
+        [-100, 0],
+        Extrapolation.CLAMP,
+      );
+      animatedMainDateOpacity.value = interpolate(
+        e.contentOffset.y,
+        [0, ScrollDistance * 1.5],
+        [1, 0],
+        Extrapolation.CLAMP,
+      );
+      animatedTopDateOpacity.value = interpolate(
+        e.contentOffset.y,
+        [ScrollDistance * 0.8, ScrollDistance],
+        [0, 1],
+        Extrapolation.CLAMP,
+      );
+    },
+    onEndDrag: e => {
+      if (e.contentOffset.y < ScrollDistance) {
+        scrollTo(animatedRef, 0, 0, true);
+        animatedHeaderHeight.value = withTiming(HeaderMaxHeight);
+        animatedTopDateTranslateY.value = withTiming(-100);
+      }
 
-  const animatedTopDateTranslateY = scrollOffsetY.interpolate({
-    inputRange: [ScrollDistance * 0.8, ScrollDistance],
-    outputRange: [-100, 0],
-    extrapolate: 'clamp',
-  });
+      if (e.contentOffset.y > ScrollDistance) {
+        animatedHeaderHeight.value = withTiming(HeaderMinHeight);
+        animatedTopDateTranslateY.value = withTiming(0);
+      }
+    },
+    onMomentumEnd: e => {
+      if (e.contentOffset.y < ScrollDistance) {
+        scrollTo(animatedRef, 0, 0, true);
+        animatedHeaderHeight.value = withTiming(HeaderMaxHeight);
+        animatedTopDateTranslateY.value = withTiming(-100);
+      }
 
-  const animatedTopDateOpacity = scrollOffsetY.interpolate({
-    inputRange: [ScrollDistance * 0.8, ScrollDistance],
-    outputRange: [0, 1],
-    extrapolate: 'clamp',
+      if (e.contentOffset.y > ScrollDistance) {
+        animatedHeaderHeight.value = withTiming(HeaderMinHeight);
+        animatedTopDateTranslateY.value = withTiming(0);
+      }
+    },
   });
 
   return (
@@ -104,13 +139,11 @@ const DynamicHeaderScreenLayout: FC = () => {
           <Text style={styles.subDateText}>27.03</Text>
         </Animated.View>
       </Animated.View>
-      <ScrollView
-        scrollEventThrottle={5}
+      <Animated.ScrollView
+        ref={animatedRef}
+        onScroll={scrollHandler}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingBottom: HeaderMaxHeight}}
-        onScroll={Animated.event([{nativeEvent: {contentOffset: {y: scrollOffsetY}}}], {
-          useNativeDriver: false,
-        })}>
+        contentContainerStyle={{paddingBottom: HeaderMaxHeight}}>
         {tasks.map(task => {
           return (
             <View
@@ -142,7 +175,7 @@ const DynamicHeaderScreenLayout: FC = () => {
             </View>
           );
         })}
-      </ScrollView>
+      </Animated.ScrollView>
     </Animated.View>
   );
 };
@@ -184,6 +217,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
   },
   mainDateText: {
     color: surfaceColor,
