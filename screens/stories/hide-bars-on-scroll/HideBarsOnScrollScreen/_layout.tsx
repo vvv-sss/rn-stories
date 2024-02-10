@@ -106,7 +106,7 @@ const HideBarsOnScrollScreenLayout: FC = () => {
         {/* LIST */}
         <Animated.FlatList
           contentContainerStyle={{paddingTop: insets.top + 60}}
-          data={Array.from({length: 100}).map((_, i) => i.toString())}
+          data={Array.from({length: 50}).map((_, i) => i.toString())}
           keyExtractor={(_item, index) => index.toString()}
           renderItem={() => <ListItem />}
           bounces={false}
