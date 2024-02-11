@@ -1,8 +1,10 @@
 import {useRouter, Href} from 'expo-router';
 import React, {createContext, FC, PropsWithChildren} from 'react';
+import {Alert} from 'react-native';
 
 interface StoriesListScreenContextValue {
   handleItemPress: (path: Href<string>) => void;
+  handleItemInfoPress: (description: string) => void;
 }
 
 export const StoriesListScreenContext = createContext<StoriesListScreenContextValue>(
@@ -26,11 +28,16 @@ const StoriesListScreenProvider: FC<PropsWithChildren> = ({children}) => {
     router.push(path);
   };
 
+  const handleItemInfoPress = (description: string) => {
+    Alert.alert('Description', description);
+  };
+
   /*---------------------------------------------*
    * 🌐 Context data
    *---------------------------------------------*/
   const value: StoriesListScreenContextValue = {
     handleItemPress,
+    handleItemInfoPress,
   };
 
   /*---------------------------------------------*

@@ -4,12 +4,13 @@ Hey there! 👋 Welcome to my stories app, where I'm working on creation of coll
 
 ## Motivation
 
-As a passionate React Native developer, I believe in the power of showcasing real-world applications to demonstrate the depth of my skills and experience. Rather than having separate repositories for each project, where a lot of duplications I decided to bring everything together in this dynamic app.
+As a dedicated React Native developer, I understand the importance of presenting tangible evidence of my capabilities and expertise through real-world applications. In an effort to streamline my portfolio and minimize redundancy, I have chosen to consolidate all my projects within this dynamic application, providing a comprehensive showcase of my skills and experience.
 
 ## ✨ RN Stories ✨
 
 - [Scroll-responsive dynamic header and bottom bar visibility](./screens/stories/hide-bars-on-scroll/hide-bars-on-scroll.md)
 - [Permissions handling](./screens//stories//permissions/permissions.md)
+- [Dynamic header and custom scroll animation](./screens//stories//dynamic-header/dynamic-header.md)
 
 ... and many more to come! 🚀
 

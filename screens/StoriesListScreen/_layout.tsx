@@ -8,9 +8,10 @@ import {withAlphaHex} from 'with-alpha-hex';
 import {Item, listData} from './lib';
 import {Feather} from '@expo/vector-icons';
 import {useStatusBarStyle} from '@hooks_global';
+import {Entypo} from '@expo/vector-icons';
 
 const StoriesListScreenLayout: FC = () => {
-  const {handleItemPress} = useContext(StoriesListScreenContext);
+  const {handleItemPress, handleItemInfoPress} = useContext(StoriesListScreenContext);
 
   const insets = useSafeAreaInsets();
 
@@ -32,16 +33,25 @@ const StoriesListScreenLayout: FC = () => {
           )}
           renderItem={({item}: {item: Item}) => {
             return (
-              <TouchableOpacity
-                style={styles.itemContainer}
-                onPress={() => handleItemPress(item.path)}>
-                <Feather
-                  name="arrow-down-right"
-                  size={30}
-                  color={withAlphaHex('#fff', 0.3)}
-                />
-                <Text style={styles.itemText}>{item.title}</Text>
-              </TouchableOpacity>
+              <View style={styles.itemContainer}>
+                <TouchableOpacity
+                  style={styles.itemTitleContainer}
+                  onPress={() => handleItemPress(item.path)}>
+                  <Feather
+                    name="arrow-down-right"
+                    size={30}
+                    color={withAlphaHex('#fff', 0.3)}
+                  />
+                  <Text style={styles.itemText}>{item.title}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => handleItemInfoPress(item.description)}>
+                  <Entypo
+                    name="info-with-circle"
+                    size={24}
+                    color={withAlphaHex('#fff', 0.3)}
+                  />
+                </TouchableOpacity>
+              </View>
             );
           }}
         />
@@ -71,9 +81,16 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  itemTitleContainer: {
+    flex: 1,
+    flexDirection: 'row',
     gap: 5,
     alignItems: 'center',
     paddingTop: 10,
+    marginRight: 20,
   },
   itemText: {
     width: '90%',

@@ -19,9 +19,13 @@ import Animated, {
 
 const {height} = Dimensions.get('screen');
 
-const HeaderMaxHeight = height * 0.3;
+const HeaderMaxHeight = 200;
 const HeaderMinHeight = 80;
 const ScrollDistance = 100;
+
+const itemHeight = 150;
+const itemMarginBottom = 2;
+const itemHeightWithMargin = itemHeight + itemMarginBottom;
 
 const textColor = '#b9e2f5';
 const surfaceColor = '#0e1111';
@@ -36,17 +40,27 @@ const DynamicHeaderScreenLayout: FC = () => {
   const animatedRef = useAnimatedRef();
 
   const animatedContainerBackground = useSharedValue('#648CF6');
+  const animatedMarginBottom = useSharedValue(0);
   const animatedHeaderHeight = useSharedValue(HeaderMaxHeight);
   const animatedTopDateTranslateY = useSharedValue(-100);
   const animatedMainDateOpacity = useSharedValue(1);
   const animatedTopDateOpacity = useSharedValue(0);
+  const firstItemMarginTop = useSharedValue(0);
+  const opacityValues = tasks.map(() => useSharedValue(1));
+  const scaleValues = tasks.map(() => useSharedValue(1));
 
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: e => {
       animatedContainerBackground.value = interpolateColor(
         e.contentOffset.y,
-        [0, ScrollDistance],
+        [0, height],
         ['#648CF6', '#F3B4D8'],
+      );
+      animatedMarginBottom.value = interpolate(
+        e.contentOffset.y,
+        [itemHeightWithMargin, itemHeightWithMargin * 4],
+        [0, -itemHeightWithMargin * 0.8],
+        Extrapolation.CLAMP,
       );
       animatedHeaderHeight.value = interpolate(
         e.contentOffset.y,
@@ -54,16 +68,17 @@ const DynamicHeaderScreenLayout: FC = () => {
         [HeaderMaxHeight, HeaderMinHeight],
         Extrapolation.CLAMP,
       );
-      animatedTopDateTranslateY.value = interpolate(
-        e.contentOffset.y,
-        [0, ScrollDistance * 3],
-        [-100, 0],
-        Extrapolation.CLAMP,
-      );
+
       animatedMainDateOpacity.value = interpolate(
         e.contentOffset.y,
-        [0, ScrollDistance * 1.5],
+        [0, ScrollDistance],
         [1, 0],
+        Extrapolation.CLAMP,
+      );
+      animatedTopDateTranslateY.value = interpolate(
+        e.contentOffset.y,
+        [0, ScrollDistance * 2],
+        [-100, 0],
         Extrapolation.CLAMP,
       );
       animatedTopDateOpacity.value = interpolate(
@@ -72,6 +87,28 @@ const DynamicHeaderScreenLayout: FC = () => {
         [0, 1],
         Extrapolation.CLAMP,
       );
+      firstItemMarginTop.value = interpolate(
+        e.contentOffset.y,
+        [0, itemHeightWithMargin],
+        [0, itemHeightWithMargin, 0],
+        Extrapolation.CLAMP,
+      );
+      tasks.forEach((_task, index) => {
+        opacityValues[index].value = interpolate(
+          e.contentOffset.y,
+          [index * itemHeightWithMargin, index * itemHeightWithMargin + itemHeightWithMargin],
+          [1, 0],
+          Extrapolation.CLAMP,
+        );
+      });
+      tasks.forEach((_task, index) => {
+        scaleValues[index].value = interpolate(
+          e.contentOffset.y,
+          [index * itemHeightWithMargin, index * itemHeightWithMargin + itemHeightWithMargin],
+          [1, 0.7],
+          Extrapolation.CLAMP,
+        );
+      });
     },
     onEndDrag: e => {
       if (e.contentOffset.y < ScrollDistance) {
@@ -105,7 +142,14 @@ const DynamicHeaderScreenLayout: FC = () => {
         styles.container,
         {paddingTop: insets.top + 10, backgroundColor: animatedContainerBackground},
       ]}>
-      <Animated.View style={[styles.header, {height: animatedHeaderHeight}]}>
+      <Animated.View
+        style={[
+          styles.header,
+          {
+            height: animatedHeaderHeight,
+            marginBottom: animatedMarginBottom,
+          },
+        ]}>
         <View style={styles.headerContent}>
           <TouchableOpacity
             onPress={handleArrowLeftPress}
@@ -143,12 +187,21 @@ const DynamicHeaderScreenLayout: FC = () => {
         ref={animatedRef}
         onScroll={scrollHandler}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingBottom: HeaderMaxHeight}}>
-        {tasks.map(task => {
+        contentContainerStyle={{
+          paddingBottom: HeaderMaxHeight,
+        }}>
+        {tasks.map((task, index) => {
           return (
-            <View
+            <Animated.View
               key={task.id}
-              style={styles.taskContainer}>
+              style={[
+                styles.taskContainer,
+                {
+                  marginTop: index === 0 ? firstItemMarginTop : 0,
+                  opacity: opacityValues[index],
+                  transform: [{scale: scaleValues[index]}],
+                },
+              ]}>
               <View style={styles.taskContent}>
                 <Text style={styles.taskTitle}>{task.title}</Text>
                 <TouchableOpacity onPress={() => Alert.alert('Add reminder')}>
@@ -172,7 +225,7 @@ const DynamicHeaderScreenLayout: FC = () => {
                   <Text style={styles.detailText}>{task.end}</Text>
                 </View>
               </View>
-            </View>
+            </Animated.View>
           );
         })}
       </Animated.ScrollView>
@@ -186,6 +239,7 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: 15,
+    zIndex: 99,
   },
   headerContent: {
     flexDirection: 'row',
@@ -206,10 +260,10 @@ const styles = StyleSheet.create({
     borderRadius: 99,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: withAlphaHex(surfaceColor, 0.2),
+    backgroundColor: surfaceColor,
   },
   dateText: {
-    color: surfaceColor,
+    color: textColor,
     fontSize: 24,
     fontWeight: '600',
   },
@@ -230,12 +284,13 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   taskContainer: {
-    height: 150,
+    height: itemHeight,
     padding: 20,
     marginHorizontal: 15,
-    marginTop: 5,
+    marginBottom: itemMarginBottom,
     borderRadius: 30,
     backgroundColor: surfaceColor,
+    overflow: 'hidden',
   },
   taskContent: {
     flex: 1,
