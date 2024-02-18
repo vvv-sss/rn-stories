@@ -7,3 +7,4 @@ The focus is on the following:
 - Handling the text input value and its validation using React Hook Form
 - Handling the text input error message and its appearance
 
+https://github.com/vvv-sss/rn-stories/assets/115154506/45bdbcad-35b1-4881-be58-abae34b48607
