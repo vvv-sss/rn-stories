@@ -39,6 +39,13 @@ export const listData: ListData = [
           'In this example the header will change its size and content based on the scroll position of the screen. Background is interpolated while user scrolls the view. There is also a custom animation for the scroll items to make it look more dynamic.',
         path: '/stories/dynamic-header/',
       },
+      {
+        id: '4',
+        title: 'Text inputs handling',
+        description:
+          'This flow is used to handle text inputs in your app. The focus is on the following: handling the text input view and its appearance; handling the keyboard avoiding view; handling the text input value and its validation using React Hook Form; handling the text input error message and its appearance.',
+        path: '/stories/text-inputs/',
+      },
     ],
   },
 ];

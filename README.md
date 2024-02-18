@@ -11,6 +11,7 @@ As a dedicated React Native developer, I understand the importance of presenting
 - [Scroll-responsive dynamic header and bottom bar visibility](./screens/stories/hide-bars-on-scroll/hide-bars-on-scroll.md)
 - [Permissions handling](./screens//stories//permissions/permissions.md)
 - [Dynamic header and custom scroll animation](./screens//stories//dynamic-header/dynamic-header.md)
+- [Text inputs handling](./screens//stories//text-inputs/text-inputs.md)
 
 ... and many more to come! 🚀
 

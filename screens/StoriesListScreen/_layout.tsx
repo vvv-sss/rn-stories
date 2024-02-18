@@ -1,5 +1,5 @@
 import React, {FC, useContext} from 'react';
-import {SectionList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Platform, SectionList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import {StoriesListScreenContext} from './_context';
 import {GradientBackground} from '@components_global';
@@ -9,9 +9,10 @@ import {Item, listData} from './lib';
 import {Feather} from '@expo/vector-icons';
 import {useStatusBarStyle} from '@hooks_global';
 import {Entypo} from '@expo/vector-icons';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 
 const StoriesListScreenLayout: FC = () => {
-  const {handleItemPress, handleItemInfoPress} = useContext(StoriesListScreenContext);
+  const {handleItemPress} = useContext(StoriesListScreenContext);
 
   const insets = useSafeAreaInsets();
 
@@ -44,7 +45,28 @@ const StoriesListScreenLayout: FC = () => {
                   />
                   <Text style={styles.itemText}>{item.title}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => handleItemInfoPress(item.description)}>
+                <TouchableOpacity
+                  onPress={() =>
+                    showMessage({
+                      message: '📋 Description',
+                      description: item.description,
+                      autoHide: false,
+                      textStyle: {color: '#d6d3d1'},
+                      style: {
+                        paddingTop: Platform.OS === 'android' ? insets.top : 0,
+                        backgroundColor: '#191919',
+                      },
+                      renderAfterContent: () => (
+                        <View style={styles.closeBtnContainer}>
+                          <TouchableOpacity
+                            onPress={hideMessage}
+                            style={styles.closeBtn}>
+                            <Text style={styles.closeBtnText}>Close</Text>
+                          </TouchableOpacity>
+                        </View>
+                      ),
+                    })
+                  }>
                   <Entypo
                     name="info-with-circle"
                     size={24}
@@ -96,6 +118,19 @@ const styles = StyleSheet.create({
     width: '90%',
     fontSize: 16,
     color: 'white',
+  },
+  closeBtnContainer: {
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  closeBtn: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 99,
+    backgroundColor: withAlphaHex('#fff', 0.1),
+  },
+  closeBtnText: {
+    color: '#d6d3d1',
   },
 });
 

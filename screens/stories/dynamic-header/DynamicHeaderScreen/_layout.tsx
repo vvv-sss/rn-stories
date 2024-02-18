@@ -2,7 +2,6 @@ import React, {FC, useContext} from 'react';
 import {Alert, Dimensions, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {ArrowLeft, BellPlus, Plus} from 'lucide-react-native';
 import {DynamicHeaderScreenContext} from './_context';
-import {useStatusBarStyle} from '../../../../lib';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {tasks} from './lib';
 import {withAlphaHex} from 'with-alpha-hex';
@@ -16,6 +15,7 @@ import Animated, {
   withTiming,
   scrollTo,
 } from 'react-native-reanimated';
+import {useStatusBarStyle} from '@hooks_global';
 
 const {height} = Dimensions.get('screen');
 

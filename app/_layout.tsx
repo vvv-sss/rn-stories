@@ -8,8 +8,9 @@ import {useFonts} from 'expo-font';
 import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import {useEffect} from 'react';
-import {useColorScheme, StyleSheet} from 'react-native';
+import {useColorScheme, StyleSheet, LogBox} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import FlashMessage from 'react-native-flash-message';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -48,15 +49,18 @@ export default function RootLayout() {
   return <RootLayoutNav />;
 }
 
+LogBox.ignoreAllLogs();
+
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <GestureHandlerRootView style={styles.container}>
+    <GestureHandlerRootView style={styles.container}>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack screenOptions={{headerShown: false}} />
-      </GestureHandlerRootView>
-    </ThemeProvider>
+        <FlashMessage position="top" />
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }
 
